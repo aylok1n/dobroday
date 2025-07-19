@@ -1,95 +1,83 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+
+function TaskList() {
+  const [markdown, setMarkdown] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/api/tasks")
+      .then((res) => res.json())
+      .then((data) => {
+        setMarkdown(String(data.tasks));
+      });
+  }, []);
+
+  if (!markdown) return <div style={{textAlign: 'center', marginTop: '3rem', color: '#888'}}>Загружаем задания...</div>;
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        minHeight: '60vh',
+        padding: '2rem 0',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)',
+      }}
+    >
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: '1.25rem',
+          boxShadow: '0 4px 24px 0 rgba(0,0,0,0.08)',
+          padding: '2.5rem 2rem 2rem 2rem',
+          maxWidth: 480,
+          width: '100%',
+          animation: 'fadeIn 0.7s cubic-bezier(.4,0,.2,1)',
+        }}
+      >
+        <h2
+          style={{
+            textAlign: 'center',
+            fontWeight: 700,
+            fontSize: '1.7rem',
+            marginBottom: '1.5rem',
+            letterSpacing: '0.01em',
+            color: '#2d3748',
+            fontFamily: 'Fira Sans, Arial, sans-serif',
+          }}
+        >
+          Задания дня для хорошего настроения
+        </h2>
+        <div
+          style={{
+            fontFamily: 'Fira Sans, Arial, sans-serif',
+            fontSize: '1.15rem',
+            lineHeight: 1.7,
+            color: '#374151',
+            marginBottom: '0.5rem',
+          }}
+        >
+          <ReactMarkdown>{markdown}</ReactMarkdown>
+        </div>
+      </div>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+    <div >
+      <main >
+        <TaskList />
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
