@@ -41,11 +41,14 @@ jobs:
       - name: Generate daily tasks via LLM
         run: node scripts/generate-tasks.js
 
-      - name: Upload static site to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./public
-          server-dir: /
+          path: ./public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
