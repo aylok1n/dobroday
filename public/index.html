@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добродень</title>
+  <meta name="description" content="Ежедневные задания для хорошего настроения и эмоционального самочувствия.">
+  <meta name="keywords" content="добродень, настроение, эмоции, задания дня, мотивация, психология, wellbeing, ежедневник, позитив, лайфхаки">
+  <meta name="author" content="Добродень">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Fira Sans', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+      min-height: 100vh;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 60vh;
+      padding: 2rem 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.7rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.01em;
+      color: #2d3748;
+    }
+    .markdown {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Задания дня для хорошего настроения</h2>
+      <div class="markdown" id="tasks"></div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    fetch('tasks.md')
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById('tasks').innerHTML = marked.parse(md);
+      })
+      .catch(() => {
+        document.getElementById('tasks').textContent = 'Загружаем задания...';
+      });
+  </script>
+</body>
+</html>

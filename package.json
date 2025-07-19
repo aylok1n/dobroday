@@ -2,26 +2,14 @@
   "name": "dobroday",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "generate": "node scripts/generate-tasks.js"
   },
   "dependencies": {
-    "next": "15.4.2",
-    "node-fetch": "^3.3.2",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-markdown": "^10.1.0"
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.2",
-    "typescript": "^5"
+    "live-server": "^1.2.2"
   }
 }

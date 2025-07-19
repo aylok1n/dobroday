@@ -1,0 +1,51 @@
+name: Generate and Export Static Tasks
+
+on:
+  schedule:
+    - cron: '0 4 * * *' # каждый день в 4 утра UTC
+  workflow_dispatch:
+
+jobs:
+  build-and-export:
+    runs-on: ubuntu-latest
+    services:
+      ollama:
+        image: ollama/ollama:latest
+        ports:
+          - 11434:11434
+        options: >-
+          --health-cmd="curl --fail http://localhost:11434/api/tags || exit 1" --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Wait for Ollama to be ready
+        run: |
+          for i in {1..30}; do
+            curl -s http://localhost:11434/api/tags && break
+            sleep 5
+          done
+
+      - name: Pull gemma3 model
+        run: |
+          curl -X POST http://localhost:11434/api/pull -d '{"name": "gemma3"}'
+
+      - name: Generate daily tasks via LLM
+        run: node scripts/generate-tasks.js
+
+      - name: Upload static site to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public
+          server-dir: /
