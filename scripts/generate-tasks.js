@@ -17,8 +17,8 @@ async function main() {
   const text = data.response;
 
   
-  fs.writeFileSync("tasks.md", text, "utf-8");
-  console.log("Tasks saved to tasks.md");
+  fs.writeFileSync("public/tasks.md", text, "utf-8");
+  console.log("Tasks saved to public/tasks.md");
 }
 
 main().catch((e) => {
